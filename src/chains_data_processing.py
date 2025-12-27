@@ -23,7 +23,7 @@ class GKChains:
             "frame_end": first_possession["frame_end"],
             "possession_chain_id": first_possession["possession_chain_id"],
             "team_id": first_possession["team_id"],
-            "team_name": first_possession["team_name"],
+            "team_name": first_possession["team_shortname"],
             "chain_length": len(chain_df),
             # Pitch Coordinates
             "x_start": first_possession["x_start"],
