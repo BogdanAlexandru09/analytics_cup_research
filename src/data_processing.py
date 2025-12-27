@@ -162,4 +162,3 @@ class SkillCornerData:
         )
         
         return player_possessions
-    
