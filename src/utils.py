@@ -20,21 +20,3 @@ class Utils:
         df["y1"] = (100 - df["y"]) * height / 100
 
         return df
-
-    def roc(self, y_true, y_probs):
-        """
-        Calculates ROC-AUC score.
-        roc_auc = roc_auc_score(y_test, y_probs)
-
-        :param self: Description
-        :param y_true: Description
-        :param y_probs: Description
-        """
-        roc_auc = roc_auc_score(y_true, y_probs)
-        print(f"ROC-AUC Score: {roc_auc:.2f}")
-
-        # fpr, tpr, thresholds = roc_curve(y_test, y_probs)
-        fpr, tpr, thresholds = roc_curve(y_true, y_probs)
-        plt.plot(fpr, tpr)
-        plt.xlabel("False Positive Rate")
-        plt.ylabel("True Positive Rate")

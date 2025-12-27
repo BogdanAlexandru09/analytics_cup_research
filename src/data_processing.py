@@ -14,12 +14,42 @@ class SkillCornerData:
             
         return td_data_matches_list
     
-    def load_tracking_data(self, tracking_data_matches_list: list) -> pd.DataFrame:
-        return pd.concat(
-            map(lambda x: pd.read_json(x, lines=True), tracking_data_matches_list),
-            ignore_index=True
-        )
+    def load_tracking_data(self, url: str, match_ids: list) -> pd.DataFrame:
+        # does not work, I need the match_id as well to the TD...
+        # return pd.concat(
+        #     map(lambda x: pd.read_json(x, lines=True), tracking_data_matches_list),
+        #     ignore_index=True
+        # )
+        td_df = pd.DataFrame()
         
+        for match_id in match_ids:
+            td_match_data_url = url + f"{match_id}/{match_id}_tracking_extrapolated.jsonl"
+            
+            td_match_df = pd.read_json(td_match_data_url, lines=True)
+    
+            tracking_data_df = pd.json_normalize(
+                td_match_df.to_dict("records"),
+                "player_data",
+                ["frame", "timestamp", "period", "possession", "ball_data"]
+            )
+            
+            tracking_data_df["possession_player_id"] = tracking_data_df["possession"].apply(
+                lambda x: x.get("player_id")
+            )
+            
+            tracking_data_df["possession_group"] = tracking_data_df["possession"].apply(
+                lambda x: x.get("group")
+            )
+            
+            tracking_data_df = tracking_data_df.drop(columns=["possession", "ball_data"])
+            tracking_data_df["match_id"] = match_id
+    
+            td_df = pd.concat([td_df, tracking_data_df], ignore_index=True)
+            
+        td_df = td_df.dropna(subset=['match_id'])
+        
+        return td_df 
+
     def process_tracking_data_dataframe(self, raw_tracking_data_df: pd.DataFrame) -> pd.DataFrame:
         tracking_data_df = pd.json_normalize(
             raw_tracking_data_df.to_dict("records"),
