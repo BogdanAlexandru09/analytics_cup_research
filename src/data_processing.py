@@ -6,6 +6,15 @@ class SkillCornerData:
     
     # TRACKING DATA 
     def prepare_tracking_data_files(self, url: str, match_ids: list) -> list:
+        """NOT USED: Prepares the list of tracking data files URLs.
+
+        Args:
+            url (str): URL.
+            match_ids (list): Match IDs array.
+
+        Returns:
+            list: List.
+        """        
         td_data_matches_list = []
         
         for match_id in match_ids:
@@ -15,7 +24,16 @@ class SkillCornerData:
         return td_data_matches_list
     
     def load_tracking_data(self, url: str, match_ids: list) -> pd.DataFrame:
-        # does not work, I need the match_id as well to the TD...
+        """Loads the tracking data.
+
+        Args:
+            url (str): URL.
+            match_ids (list): Match IDs array.
+
+        Returns:
+            pd.DataFrame: DataFrame.
+        """        
+        # this does not work, I need the match_id as well to the TD...
         # return pd.concat(
         #     map(lambda x: pd.read_json(x, lines=True), tracking_data_matches_list),
         #     ignore_index=True
@@ -51,6 +69,14 @@ class SkillCornerData:
         return td_df 
 
     def process_tracking_data_dataframe(self, raw_tracking_data_df: pd.DataFrame) -> pd.DataFrame:
+        """NOT USED: Tracking data DataFrame processing.
+
+        Args:
+            raw_tracking_data_df (pd.DataFrame): DataFrame.
+
+        Returns:
+            pd.DataFrame: DataFrame.
+        """        
         tracking_data_df = pd.json_normalize(
             raw_tracking_data_df.to_dict("records"),
             "player_data",
@@ -71,6 +97,15 @@ class SkillCornerData:
         
     # MATCHES METADATA    
     def prepare_metadata_files(self, url: str, match_ids: list) -> list:
+        """Prepares the list of metadata files URLs.
+
+        Args:
+            url (str): URL.
+            match_ids (list): Match IDs array.
+
+        Returns:
+            list: List.
+        """        
         md_matches_list = []
         
         for match_id in match_ids:
@@ -80,12 +115,28 @@ class SkillCornerData:
         return md_matches_list
     
     def load_metadata(self, metadata_matches_list: list) -> pd.DataFrame:
+        """Loads the metadata.
+
+        Args:
+            metadata_matches_list (list): List.
+
+        Returns:
+            pd.DataFrame: DataFrame.
+        """        
         return pd.concat(
             (pd.read_json(path, lines=True, encoding='utf-8') for path in metadata_matches_list),
             ignore_index=True
         )
         
     def process_players_metadata_dataframe(self, raw_players_metadata_df: pd.DataFrame) -> pd.DataFrame:
+        """Players Metadata DataFrame processing.
+
+        Args:
+            raw_players_metadata_df (pd.DataFrame): DataFrame.
+
+        Returns:
+            pd.DataFrame: DataFrame.
+        """        
         players_metadata_df = pd.json_normalize(
             raw_players_metadata_df.to_dict("records"),
             max_level=2
@@ -155,6 +206,15 @@ class SkillCornerData:
 
     # MATCHES DYNAMIC EVENTS
     def prepare_dynamic_events_files(self, url: str, match_ids: list) -> list:
+        """Prepares the list of dynamic events files URLs.
+
+        Args:
+            url (str): URL.
+            match_ids (list): Match IDs array.
+
+        Returns:
+            list: List
+        """        
         de_matches_list = []
         
         for match_id in match_ids:
@@ -164,12 +224,28 @@ class SkillCornerData:
         return de_matches_list    
 
     def load_dynamic_events_data(self, dynamic_events_matches_list: list) -> pd.DataFrame:
+        """Loads dynamic events data.
+
+        Args:
+            dynamic_events_matches_list (list): List
+
+        Returns:
+            pd.DataFrame: DataFrame.
+        """        
         return pd.concat(
             map(pd.read_csv, dynamic_events_matches_list),
             ignore_index=True
         )
         
     def filter_player_possessions(self, dynamic_events_df: pd.DataFrame) -> pd.DataFrame:
+        """Filters players possessions from the dynamic events data.
+
+        Args:
+            dynamic_events_df (pd.DataFrame): DataFrame.
+
+        Returns:
+            pd.DataFrame: DataFrame.
+        """        
         player_possessions = dynamic_events_df[dynamic_events_df['event_type'] == 'player_possession'].copy()
 
         # Group consecutive possessions by the same team

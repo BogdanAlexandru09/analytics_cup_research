@@ -80,14 +80,11 @@ class GKChains:
         return result
 
     def get_gk_chains_info(self, gk_chains_df: pd.DataFrame):
-        """
-        Docstring for get_gk_chains_info
+        """GK Chains Analysis.
 
-        :param self: Description
-        :param gk_chains: Description
-        :type gk_chains: pd.DataFrame
+        Args:
+            gk_chains_df (pd.DataFrame): DataFrame.
         """
-
         print("\n=== GK-Started Possession Chain Analysis ===")
         print(f"Total GK-started chains: {len(gk_chains_df)}")
         print(
@@ -114,7 +111,6 @@ class GKChains:
                 f"\nAverage chain length: {attacking_chains['chain_length'].mean():.1f} possessions"
             )
 
-        # Step 9: Optional - More detailed breakdown
         print("\n=== Starting Phase Distribution ===")
         print(gk_chains_df["start_phase"].value_counts())
 
